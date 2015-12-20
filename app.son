@@ -1,0 +1,8 @@
+{                                                                                                                                      
+  "name": "sf_train",                                                                                                   
+  "description": "server for training sf integrations",                                                                            
+  "repository": "https://scottumsted@bitbucket.org/scottumsted/sf_train.git",                                                                   
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",                                                                              
+  "keywords": ["node", "express", "static"],                                                                                           
+  "image": "heroku/nodejs"                                                                                                             
+} 

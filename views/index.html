@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--     <meta http-equiv="refresh" content="20"> -->
+    <title>sf api playground</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Mono' rel='stylesheet' type='text/css'>
+    <style>
+        body {
+            font-family:'Fira Mono', monospace;
+            color: #ffffff;
+            background-color: rgb(70, 20, 140);
+            margin: 0;
+        }
+        header {
+            color: orange;
+            font-size: 2em;
+            width: 100%;
+            margin: 30px 0;
+            text-align: center;
+        }
+        section {
+            width: 60%;
+            margin: 30px auto;
+        }
+        @media screen and (max-width: 800px) {
+            section {
+                width: 95%;
+            }
+        }
+        article {
+            margin: 20px 0;
+        }
+        article.color-0 {
+            color: red;
+        }
+        article.color-1 {
+            color: green;
+        }
+        article.color-2 {
+            color: blue;
+        }
+        article.color-3 {
+            color: yellow;
+        }
+        a:link {
+            text-decoration: inherit;
+            color: inherit;
+        }
+        a:visited {
+            text-decoration: inherit;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <header><a href="#" onclick="getAllSobjects()">sf api playground</a>
+    </header>
+    <section>
+        <h3>
+            <a href="#" onclick="getAllSobjects()">sObjects</a>
+            <a href="#" onclick="getLimits()">Limits</a>
+        </h3>
+    </section>
+
+    <section>
+        <div id="result">
+
+        </div>
+    </section>
+</body>
+<script>
+    function getAllSobjects() {
+        $.get('/api/testsalesforce', function(data) {
+            $('#result').html('');
+            $.each(data.sobjects, function(i, v) {
+                $('#result').append("<a href='#' onclick='getSobjectDetail(\"" + v.name + "\")'>" + v.name + "</a><br/>");
+            });
+        });
+    }
+
+    function getSobjectDetail(sobject) {
+        $.get('/api/sobject/' + sobject, function(data) {
+            $('#result').html("<h3><a href='#' onclick='getSobjectData(\"" + sobject + "\",10)'>" + sobject + '</a></h3>');
+            $.each(data.fields, function(i, v) {
+                $('#result').append(v.name + ' : ' + v.label + ' : ' + v.type + ' : ' + v.byteLength + '<br/>');
+            });
+        });
+    }
+
+    function getSobjectData(sobject) {
+        $.get('/api/sobject/query/' + sobject, function(data) {
+            $('#result').html("<h3><a href='#' onclick='getSobjectDetail(\"" + sobject + "\")'>" + sobject + '</a></h3>');
+            $.each(data.records, function(i,v){
+                for(var field in v){
+                    if(v.hasOwnProperty(field)){
+                        $('#result').append(document.createTextNode(field+' : '+v[field]));
+                        $('#result').append('<br/>');
+                    }
+                }
+                $('#result').append('<br/>');
+            });
+        });
+    }
+
+    function getLimits() {
+        $.get('/api/limits', function(data) {
+            $('#result').html('<h3>Limits</h3>');
+            for (var property in data) {
+                if (data.hasOwnProperty(property)) {
+                    $('#result').append(property+' : '+data[property].Max+' : '+data[property].Remaining+'<br/>');
+               }
+            }
+        });
+    }
+    $.ready(getAllSobjects());
+</script>
+
+</html>
