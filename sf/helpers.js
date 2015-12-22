@@ -24,10 +24,10 @@ module.exports.authorize = function(app){
 				var sfAccess = JSON.parse(body);
 				app.set('sfAccess', sfAccess);
                 _this.sfCredentials.rootUrl = sfAccess.instance_url;
-				console.log('body:'+body);
+				console.log('sf.authorize success\nerr:'+err+'\nres: '+JSON.stringify(res)+'\nbody:'+body);
 			}else{
 				app.set('sfAccess', {});
-				console.log('sf.authorize error:'+body);
+				console.log('sf.authorize fail\nerr:'+err+'\nres: '+JSON.stringify(res)+'\nbody:'+body);
 			}
 		});	
 };
@@ -122,9 +122,10 @@ module.exports.reauthorize = function(app, options, method, callback){
 				app.set('sfAccess', sfAccess);
                 _this.sfCredentials.rootUrl = sfAccess.instance_url;
                 method(app, options, callback, false);
+				console.log('sf.authorize success\nerr:'+err+'\nres: '+JSON.stringify(res)+'\nbody:'+body);
 			}else{
 				app.set('sfAccess', {});
-				console.log('sf.reauthorize error:'+body);
+				console.log('sf.authorize fail\nerr:'+err+'\nres: '+JSON.stringify(res)+'\nbody:'+body);
 			}
 		});	
 };
